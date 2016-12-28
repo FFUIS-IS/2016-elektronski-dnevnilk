@@ -17,13 +17,7 @@ namespace ElectronicSchoolDiary.Repos
         public static string GetNameQuery()
         {
             string query;
-            query = @"SELECT Name FROM Students";
-            return query;
-        }
-        public static string GetSurnameQuery()
-        {
-            string query;
-            query = @"SELECT Surname FROM Students";
+            query = @"SELECT Name,Surname FROM Students";
             return query;
         }
         public static bool AddStudent(string StudentName, string StudentSurname, string Jmbg, string Address, string Phone_number,int departmentsId)
@@ -66,22 +60,9 @@ namespace ElectronicSchoolDiary.Repos
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+               MessageBox.Show(ex.Message);
             }
             return flag;
-        }
-
-        public static int GetIdByNumber(int number)
-        {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Students WHERE Id = @number", Connection);
-            command.Parameters.AddWithValue("@number", number);
-            SqlCeDataReader reader = command.ExecuteReader();
-
-            reader.Read();
-            int result = (int)reader["Id"];
-            reader.Close();
-
-            return result;
         }
 
         public static int GetIdByJmbg(string jmbg)
@@ -95,6 +76,36 @@ namespace ElectronicSchoolDiary.Repos
             reader.Close();
 
             return result;
+        }
+        public static Student GetStudentByName(string name, string surname)
+        {
+            Student student = null;
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Jmbg,Address,Phone_number FROM Students WHERE name = @name AND surname = @surname", Connection);
+            command.Parameters.AddWithValue("@name", name);
+            command.Parameters.AddWithValue("@surname", surname);
+            SqlCeDataReader reader = command.ExecuteReader();
+
+            reader.Read();
+            
+                string jmbg = reader["Jmbg"].ToString();
+                string address = reader["Address"].ToString();
+                string phone = reader["Phone_number"].ToString();
+                student = new Student(name, surname, jmbg, address, phone);
+            
+
+            return student;
+        }
+        public static int GetDepartmentIdByStudent(Student student)
+        {
+            SqlCeCommand command = new SqlCeCommand(@"SELECT DepartmentsId FROM Students WHERE Jmbg = @jmbg", Connection);
+            command.Parameters.AddWithValue("@jmbg", student.Jmbg);
+            SqlCeDataReader reader = command.ExecuteReader();
+
+            reader.Read();
+            int depId = (int)reader["DepartmentsId"];
+            reader.Close();
+            return depId;
+
         }
         public static bool CheckUnique(string jmbg)
         {

@@ -34,6 +34,17 @@ namespace ElectronicSchoolDiary.Repos
 
             return result;
         }
+        public static int GetIdByTitle(string title)
+        {
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Courses WHERE Title = @title", Connection);
+            command.Parameters.AddWithValue("@title", title);
+            SqlCeDataReader reader = command.ExecuteReader();
+            reader.Read();
+            int result = (int)reader["Id"];
+            reader.Close();
+
+            return result;
+        }
         public static bool AddCourse(string Title, int ClassesId)
         {
             bool flag = false;
