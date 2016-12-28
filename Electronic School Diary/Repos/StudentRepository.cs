@@ -14,10 +14,11 @@ namespace ElectronicSchoolDiary.Repos
     {
         private static SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
 
+       
         public static string GetQuery(int DepartmentId)
         {
             string query;
-            query = @"SELECT Name,Surname FROM Students WHERE DepartmentsId =" + DepartmentId;
+            query = @"SELECT Id, Name, Surname FROM Students WHERE DepartmentsId =" + DepartmentId;
             return query;
         }
         public static string GetNameQuery()

@@ -15,12 +15,7 @@ namespace ElectronicSchoolDiary.Repos
     {
         private static SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
 
-        public static string GetQuery()
-        {
-            string query;
-            query = @"SELECT Name, Surname, Marks.Mark FROM Students  JOIN Marks ON Students.id = Marks.StudentsId";
-            return query;
-        }
+       
         public static string GetMarks(int studentId, int courseId)
         {
             SqlCeCommand command = new SqlCeCommand(@"SELECT Mark FROM Marks WHERE StudentsId = @studId AND CoursesId = @courseId ORDER BY Date", Connection);
@@ -34,6 +29,7 @@ namespace ElectronicSchoolDiary.Repos
             }
             return m;
         }
+       
         public static bool InsertMark(int mark, int studentsId, int coursesId)
         {
             bool flag = false;

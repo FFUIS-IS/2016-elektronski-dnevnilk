@@ -20,13 +20,15 @@ namespace ElectronicSchoolDiary.Repos
             query = @"SELECT Title FROM Courses";
             return query;
         }
-
-        public static string GetQuery(string  CoursesIds)
+      
+        public static string GetQuery(string CoursesIds)
         {
             string query;
             query = @"SELECT Title FROM Courses WHERE Id IN" + CoursesIds;
             return query;
         }
+       
+        
         public static int GetIdByClassesId(int classesId)
         {
             int result = -1;

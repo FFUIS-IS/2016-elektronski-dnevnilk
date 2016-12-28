@@ -15,6 +15,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Data.SqlServerCe;
 using System.Diagnostics;
+using System.Security.Permissions;
 
 namespace ElectronicSchoolDiary
 {  
@@ -228,77 +229,102 @@ namespace ElectronicSchoolDiary
 
         private void PrintStatisticTeacherRoundedButton_Click(object sender, EventArgs e)
         {
-
-            string Query = MarksRepository.GetQuery();
-
-            PdfPTable table = new PdfPTable(4)
+            int columnNumber = 6;
+            PdfPTable table = new PdfPTable(columnNumber)
             {
                 //actual width of table in points
-                TotalWidth = 216f,
+                TotalWidth = 400f,
                 //fix the absolute width of the table
                 LockedWidth = true
             };
 
             //relative col widths in proportions - 1/3 and 2/3
-            float[] widths = new float[] { 1f, 1f, 1f, 2f };
+            float[] widths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f};
             table.SetWidths(widths);
             table.HorizontalAlignment = 0;
             //leave a gap before and after the table
             table.SpacingBefore = 20f;
             table.SpacingAfter = 30f;
-            PdfPCell cell = new PdfPCell(new Phrase("Students"))
+            PdfPCell cell = new PdfPCell(new Phrase("Ucenici"))
             {
-                Colspan = 2,
+                Colspan = columnNumber,
                 Border = 0,
                 HorizontalAlignment = 1
             };
             table.AddCell(cell);
 
-            SqlCeCommand cmd = new SqlCeCommand(Query, Connection);
+            table.AddCell("Ime");
+            table.AddCell("Prezime");
+            table.AddCell("Odsustva(U)");
+            table.AddCell("Odsustva(O)");
+            table.AddCell("Odsustva(N)");
+            table.AddCell("Prosjek");
+
+
+
+            int TeacherId = CurrentTeacher.Id;
+            int DepartmentId = DepartmentsRepository.GetIdByTeacherId(TeacherId);
+            string StudentsQuery = StudentRepository.GetQuery(DepartmentId);
+
+            SqlCeCommand cmd = new SqlCeCommand(StudentsQuery, Connection);
             SqlCeDataReader reader = cmd.ExecuteReader();
-
-
+         
 
             try
             {
                 while (reader.Read())
                 {
+                    int justifiedAbsents = AbsentsRepository.GetAbsents((int)reader["Id"], 1);
+                    int unJustifiedAbsents = AbsentsRepository.GetAbsents((int)reader["Id"], 0);
+                    int sum = justifiedAbsents + unJustifiedAbsents;
+
+                    string CoursesId = Teachers_Departments_CoursesRepository.GetCoursesId(CurrentTeacher.Id).Trim(',');
+                    string[] parts = CoursesId.Split(',');
+                    int suum = 0;
+                    for (int i = 0; i < parts.Length ; i++)
+                    {
+                        string marks = MarksRepository.GetMarks((int)reader["Id"], int.Parse(parts[i]));
+                        string[] particles = marks.Split(',');
+                        double mark =  Math.Round(float.Parse(CalculateAverageGrade(particles)), MidpointRounding.AwayFromZero);
+                      
+                        suum += (int)mark;
+                    }
+                    
+                    float average = suum / (parts.Length);
+
+                    string averageMark = average.ToString("0.00") + "(" + Math.Round(average, MidpointRounding.AwayFromZero) + ")";
+
                     table.AddCell(reader["Name"].ToString());
                     table.AddCell(reader["Surname"].ToString());
-                    table.AddCell(reader["Mark"].ToString());
-                    table.AddCell(reader["Mark"].ToString());
-                    table.AddCell(reader["Mark"].ToString());
-
+                    table.AddCell(sum.ToString());
+                    table.AddCell(justifiedAbsents.ToString());
+                    table.AddCell(unJustifiedAbsents.ToString());
+                    table.AddCell(averageMark);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-
-
             LoginForm logf = new LoginForm();
             string Dir = logf.GetHomeDirectory();
-            using (MemoryStream ms = new MemoryStream())
-            {
-                FileStream fs = new FileStream("report.pdf", FileMode.Create);
-                Document doc = new Document(PageSize.A4);
-                PdfWriter pdfWriter = PdfWriter.GetInstance(doc, fs);
-                doc.Open();
-                doc.Add(table);
-                while (reader.Read())
-                {
-                    doc.Add(new Paragraph(reader[0].ToString() + reader[1].ToString() + reader[2].ToString()));
-                }
+          
+                    FileStream fs = new FileStream("report.pdf", FileMode.Create);
 
-                pdfWriter.CloseStream = true;
-                doc.Close();
+                    Document doc = new Document(PageSize.A4);
+                    PdfWriter pdfWriter = PdfWriter.GetInstance(doc, fs);
+                    doc.Open();
+                    doc.Add(table);
+                    while (reader.Read())
+                    {
+                        doc.Add(new Paragraph(reader[0].ToString() + reader[1].ToString() + reader[2].ToString()));
+                    }
 
-                Process.Start("report.pdf");
-            }
+                    pdfWriter.CloseStream = true;
+                    doc.Close();
 
-
-
+                    
+                    Process.Start("report.pdf");
         }
 
         private void ControlTableButton_Click(object sender, EventArgs e)

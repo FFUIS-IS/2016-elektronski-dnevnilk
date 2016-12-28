@@ -15,6 +15,7 @@ namespace ElectronicSchoolDiary.Repos
     {
         private static SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
 
+      
         public static int GetAbsents(int studentId, int isjustified)
         {
             SqlCeCommand command = new SqlCeCommand(@"SELECT Hour FROM Absents WHERE StudentsId = @studId AND Justified = @just", Connection);
