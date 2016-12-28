@@ -1,13 +1,10 @@
-﻿using ElectronicSchoolDiary.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlServerCe;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlServerCe;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
-using System.Text.RegularExpressions;
 
 namespace ElectronicSchoolDiary.Repos
 {
@@ -15,42 +12,68 @@ namespace ElectronicSchoolDiary.Repos
     {
         private static SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
 
-        public static int GetAbsents(int studentId, int isjustified)
+        public static int GetHourQuery()
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Hour FROM Absents WHERE StudentsId = @studId AND Justified = @just", Connection);
-            command.Parameters.AddWithValue("@studId", studentId);
-            command.Parameters.AddWithValue("@just", isjustified);
-            SqlCeDataReader reader = command.ExecuteReader();
-            int m = 0;
-            while (reader.Read())
-            {
-                m += int.Parse(reader["Hour"].ToString());
-            }
-            return m;
+            string hourString = @"SELECT Hour FROM Abstents";
+            int hour = Int16.Parse(hourString);
+            return hour;
         }
-        public static bool InsertAbsent(int hours, bool justified,  int studentsId)
+
+        public static bool IsJustifiedQuery()
+        {
+            string isJustifiedString = @"SELECT Justified FROM Abstents";
+            bool isJustified = Boolean.Parse(isJustifiedString);
+            return isJustified;
+        }
+
+        public static DateTime GetDateQuery()
+        {
+            string dateString = @"SELECT Date FROM Absents";
+            DateTime date = DateTime.Parse(dateString);
+            return date;
+        }
+
+        public static int GetIdByStudentId(int studentId)
+        {
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Absents WHERE StudentsId = @studentid", Connection);
+            command.Parameters.AddWithValue("@studentid", studentId);
+            SqlCeDataReader reader = command.ExecuteReader();
+
+            reader.Read();
+
+            int result = (int)reader["Id"];
+            reader.Close();
+
+            return result;
+        }
+
+        public static bool AddAbsent(int Hour, DateTime Date, int StudentId, bool IsJustified)
         {
             bool flag = false;
+
             try
             {
-
-                SqlCeCommand command = new SqlCeCommand(@"INSERT INTO Absents (Hour, Justified, Date, StudentsId)
-                    VALUES (@hour, @justified, @date, @studentsid)", Connection);
-                command.Parameters.AddWithValue("@hour", hours);
-                command.Parameters.AddWithValue("@justified", justified);
-                command.Parameters.AddWithValue("@date", DateTime.Now);
-                command.Parameters.AddWithValue("@studentsid", studentsId);
-                int result = command.ExecuteNonQuery();
+                if (Hour < 1 || Hour > 7)
+                {
+                    MessageBox.Show("Broj casova mora biti izmedju 1 i 7!");
+                }
+                int studentId = StudentRepository.GetIdByNumber(StudentId);
+                SqlCeCommand command1 = new SqlCeCommand(@"INSERT INTO Absents(Hour, Date, StudentId, IsJustified)
+                    VALUES (@hour, @date, @studentId, @isJustified)", Connection);
+                command1.Parameters.AddWithValue("@hour", Hour);
+                command1.Parameters.AddWithValue("@date", Date);
+                command1.Parameters.AddWithValue("@studentId", studentId);
+                command1.Parameters.AddWithValue("@isJustified", IsJustified);
+                int result = command1.ExecuteNonQuery();
                 if (result > 0)
                 {
                     flag = true;
-                    MessageBox.Show("Odsustvo sa : " + hours + " časova je uspješno dodato !");
+                    MessageBox.Show("Izostanak je uspjesno dodat!");
+                    //IsJustified = false;
                 }
-
             }
             catch (Exception ex)
             {
-                flag = false;
                 MessageBox.Show(ex.Message);
             }
             return flag;

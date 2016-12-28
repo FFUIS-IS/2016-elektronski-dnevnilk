@@ -35,7 +35,6 @@ namespace ElectronicSchoolDiary.Repos
                  MessageBox.Show(ex.Message);
             }
         }
-       
 
 
     }

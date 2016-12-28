@@ -38,26 +38,13 @@ namespace ElectronicSchoolDiary.Repos
         }
         public static int GetIdByTitle(int title)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE Title = @title", Connection);
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE Title = @title AND ClassesId = @classid", Connection);
             command.Parameters.AddWithValue("@title", title);
             SqlCeDataReader reader = command.ExecuteReader();
 
             reader.Read();
 
             int result = (int)reader["Id"];
-            reader.Close();
-
-            return result;
-        }
-        public static int GetTitleById(int id)
-        {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Title FROM Departments WHERE Id = @id", Connection);
-            command.Parameters.AddWithValue("@id", id);
-            SqlCeDataReader reader = command.ExecuteReader();
-
-            reader.Read();
-
-            int result = (int)reader["Title"];
             reader.Close();
 
             return result;
@@ -91,18 +78,6 @@ namespace ElectronicSchoolDiary.Repos
                 MessageBox.Show(ex.Message);
             }
             return flag;
-        }
-        public static int GetId(int teacherId)
-        {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE TeachersId = @tid", Connection);
-            command.Parameters.AddWithValue("@tid", teacherId);
-            SqlCeDataReader reader = command.ExecuteReader();
-
-            reader.Read();
-            int result = (int)reader["Id"];
-            reader.Close();
-
-            return result;
         }
     }
 }

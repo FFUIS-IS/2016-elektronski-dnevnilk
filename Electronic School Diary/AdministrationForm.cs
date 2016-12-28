@@ -378,7 +378,6 @@ namespace ElectronicSchoolDiary
                     bool isDepartmentAdded = DepartmentsRepository.AddDepartment(Title, TeachersId, ClassesId);
                     if (isDepartmentAdded == true)
                     {
-                        PopulateDepartmentsComboBox();
                         DepartmentNumberTextBox.Text = "";
                     }
                 }
@@ -407,7 +406,6 @@ namespace ElectronicSchoolDiary
                     bool isTeacherAdded = TeacherRepository.AddTeacher(TeacherNameTextBox.Text, TeacherSurnameTextBox.Text, TeacherUserNameTextBox.Text, TeacherAddressTextBox.Text, TeacherPhoneTextBox.Text, TeacherNameTextBox.Text);
                     if (isTeacherAdded == true)
                     {
-                        PopulateTeachersComboBox();
                         TeacherNameTextBox.Text = "";
                         TeacherSurnameTextBox.Text = "";
                         TeacherUserNameTextBox.Text = "";
