@@ -23,7 +23,7 @@ namespace ElectronicSchoolDiary.Repos
         }
         public static string GetMarks(int studentId, int courseId)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Mark FROM Marks WHERE StudentsId = @studId AND CoursesId = @courseId", Connection);
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Mark FROM Marks WHERE StudentsId = @studId AND CoursesId = @courseId ORDER BY Date", Connection);
             command.Parameters.AddWithValue("@studId", studentId);
             command.Parameters.AddWithValue("@courseId", courseId);
             SqlCeDataReader reader = command.ExecuteReader();

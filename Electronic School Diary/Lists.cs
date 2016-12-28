@@ -34,6 +34,7 @@ namespace ElectronicSchoolDiary
                 MessageBox.Show(exc.Message.ToString());
             }
         }
+        
         public static void FillDropDownList2(string Query1,string column1,string Query2,string column2, ComboBox DropDownName)
         {
 

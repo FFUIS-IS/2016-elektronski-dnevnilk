@@ -19,29 +19,51 @@ namespace ElectronicSchoolDiary.Repos
             string query;
             query = @"SELECT Title FROM Courses";
             return query;
+        }
 
+        public static string GetQuery(string  CoursesIds)
+        {
+            string query;
+            query = @"SELECT Title FROM Courses WHERE Id IN" + CoursesIds;
+            return query;
         }
         public static int GetIdByClassesId(int classesId)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Courses WHERE ClassesId = @classesid", Connection);
-            command.Parameters.AddWithValue("@classesid", classesId);
-            SqlCeDataReader reader = command.ExecuteReader();
+            int result = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Courses WHERE ClassesId = @classesid", Connection);
+                command.Parameters.AddWithValue("@classesid", classesId);
+                SqlCeDataReader reader = command.ExecuteReader();
 
-            reader.Read();
+                reader.Read();
 
-            int result = (int)reader["Id"];
-            reader.Close();
+                 result = (int)reader["Id"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             return result;
         }
         public static int GetIdByTitle(string title)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Courses WHERE Title = @title", Connection);
-            command.Parameters.AddWithValue("@title", title);
-            SqlCeDataReader reader = command.ExecuteReader();
-            reader.Read();
-            int result = (int)reader["Id"];
-            reader.Close();
+            int result = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Courses WHERE Title = @title", Connection);
+                command.Parameters.AddWithValue("@title", title);
+                SqlCeDataReader reader = command.ExecuteReader();
+                reader.Read();
+                result = (int)reader["Id"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             return result;
         }

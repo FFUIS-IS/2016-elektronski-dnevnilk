@@ -52,27 +52,50 @@ namespace ElectronicSchoolDiary
         }
         private void PopulateStudentsComboBox()
         {
-            string Name = StudentRepository.GetNameQuery();
-            Lists.FillDropDownList2(Name, "Name", Name, "Surname", StudentsBox);
+            try
+            {
+                int TeacherId = CurrentTeacher.Id;
+                int DepartmentId = DepartmentsRepository.GetIdByTeacherId(TeacherId);
+                string Name = StudentRepository.GetQuery(DepartmentId);
+                Lists.FillDropDownList2(Name, "Name", Name, "Surname", StudentsBox);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }  
         private void PopulateCoursesComboBox()
         {
-            string Title = CoursesRepository.GetQuery();
-            Lists.FillDropDownList1(Title, "Title", CoursesBox);
+            try
+            { 
+
+               string CoursesId = Teachers_Departments_CoursesRepository.GetCoursesId(CurrentTeacher.Id);
+               string Title = CoursesRepository.GetQuery("(" + CoursesId.TrimEnd(',')+ ")");
+               Lists.FillDropDownList1(Title, "Title", CoursesBox);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         private Student CurrentStudent()
         {
-            Student student;
-            string currentStudentName;
-            string currentStudentSurname;
+            Student student = null;
+            try
+            {
+                string currentStudentName;
+                string currentStudentSurname;
          
                 string[] parts = StudentsBox.Text.Split('-');
-                 currentStudentName = parts[0];
-                 currentStudentSurname = parts[1];
-
-           
+                currentStudentName = parts[0];
+                currentStudentSurname = parts[1];
                 student = StudentRepository.GetStudentByName(currentStudentName, currentStudentSurname);
-            
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
             return student;
         }
         private Parent CurrentParent()
@@ -94,6 +117,8 @@ namespace ElectronicSchoolDiary
       
         private void FillStudentMarks()
         {
+            try
+            {
                 Student student = CurrentStudent();
                 int studentId = StudentRepository.GetIdByJmbg(student.Jmbg);
                 int courseId = CoursesRepository.GetIdByTitle(GetCurrentCourse());
@@ -104,15 +129,27 @@ namespace ElectronicSchoolDiary
                 {
                     AverageMarkLabel.Text = CalculateAverageGrade(parts);
                 }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         private void FillStudentAbsents()
         {
-            Student student = CurrentStudent();
-            int studentId = StudentRepository.GetIdByJmbg(student.Jmbg);
-            int justifiedAbsents = AbsentsRepository.GetAbsents(studentId, 1);
-            int unjustifiedAbsents = AbsentsRepository.GetAbsents(studentId, 0);
-            JustifiedAbsentLabel.Text = justifiedAbsents.ToString();
-            UnjustifiedAbsentLabel.Text = unjustifiedAbsents.ToString();
+            try
+            {
+                Student student = CurrentStudent();
+                int studentId = StudentRepository.GetIdByJmbg(student.Jmbg);
+                int justifiedAbsents = AbsentsRepository.GetAbsents(studentId, 1);
+                int unjustifiedAbsents = AbsentsRepository.GetAbsents(studentId, 0);
+                JustifiedAbsentLabel.Text = justifiedAbsents.ToString();
+                UnjustifiedAbsentLabel.Text = unjustifiedAbsents.ToString();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         public string CalculateAverageGrade(string[] parts)
         {
@@ -123,28 +160,44 @@ namespace ElectronicSchoolDiary
                 }
             float average = sum / (parts.Length -1);
 
-            return average.ToString();
+            return average.ToString("0.00");
         }
         private void FillStudentInfoLabels()
         {
-            Student student = CurrentStudent();
-            int departmentId = StudentRepository.GetDepartmentIdByStudent(student);
-            int departmentTitle = DepartmentsRepository.GetTitleById(departmentId);
-            StudentNameLabel.Text = student.Name;
-            StudentSurnameLabel.Text = student.Surname;
-            StudentJmbgLabel.Text = student.Jmbg.ToString();
-            StudentAddressLabel.Text = student.Address;
-            StudentPhoneLabel.Text = student.Phone_number;
-            DepartmentLabel.Text = departmentTitle.ToString();
+            try
+            {
+                Student student = CurrentStudent();
+                int departmentId = StudentRepository.GetDepartmentIdByStudent(student);
+                int departmentTitle = DepartmentsRepository.GetTitleById(departmentId);
+                StudentNameLabel.Text = student.Name;
+                StudentSurnameLabel.Text = student.Surname;
+                StudentJmbgLabel.Text = student.Jmbg.ToString();
+                StudentAddressLabel.Text = student.Address;
+                StudentPhoneLabel.Text = student.Phone_number;
+                DepartmentLabel.Text = departmentTitle.ToString();
+            }
+            catch (Exception e )
+            {
+
+                MessageBox.Show(e.Message);
+            }
         }
         private void FillParentInfoLabels()
         {
+            try
+            { 
             Parent parent = CurrentParent();
             ParentNameLabel.Text = parent.Name;
             ParentSurnameLabel.Text = parent.Surname;
             ParentAddressLabel.Text = parent.Address;
             ParentEmailLabel.Text = parent.Email;
             ParentPhoneLabel.Text = parent.Phone_number;
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show(e.Message);
+            }
         }
         private void LogOutUserButton_Click(object sender, EventArgs e)
         {
@@ -178,38 +231,44 @@ namespace ElectronicSchoolDiary
 
             string Query = MarksRepository.GetQuery();
 
-            PdfPTable table = new PdfPTable(2);
-            //actual width of table in points
-            table.TotalWidth = 216f;
-            //fix the absolute width of the table
-            table.LockedWidth = true;
+            PdfPTable table = new PdfPTable(4)
+            {
+                //actual width of table in points
+                TotalWidth = 216f,
+                //fix the absolute width of the table
+                LockedWidth = true
+            };
 
             //relative col widths in proportions - 1/3 and 2/3
-            float[] widths = new float[] { 3f, 3f };
+            float[] widths = new float[] { 1f, 1f, 1f, 2f };
             table.SetWidths(widths);
             table.HorizontalAlignment = 0;
             //leave a gap before and after the table
             table.SpacingBefore = 20f;
             table.SpacingAfter = 30f;
-            PdfPCell cell = new PdfPCell(new Phrase("Students"));
-            cell.Colspan = 2;
-            cell.Border = 0;
-            cell.HorizontalAlignment = 1;
+            PdfPCell cell = new PdfPCell(new Phrase("Students"))
+            {
+                Colspan = 2,
+                Border = 0,
+                HorizontalAlignment = 1
+            };
             table.AddCell(cell);
 
             SqlCeCommand cmd = new SqlCeCommand(Query, Connection);
             SqlCeDataReader reader = cmd.ExecuteReader();
 
 
-            table.AddCell("Ime i Prezime");
-            table.AddCell("Ocjena");
+
             try
             {
                 while (reader.Read())
                 {
-
-                    table.AddCell(reader["Name"].ToString() + " " + reader["Surname"].ToString());
+                    table.AddCell(reader["Name"].ToString());
+                    table.AddCell(reader["Surname"].ToString());
                     table.AddCell(reader["Mark"].ToString());
+                    table.AddCell(reader["Mark"].ToString());
+                    table.AddCell(reader["Mark"].ToString());
+
                 }
             }
             catch (Exception ex)
@@ -220,16 +279,23 @@ namespace ElectronicSchoolDiary
 
             LoginForm logf = new LoginForm();
             string Dir = logf.GetHomeDirectory();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                FileStream fs = new FileStream("report.pdf", FileMode.Create);
+                Document doc = new Document(PageSize.A4);
+                PdfWriter pdfWriter = PdfWriter.GetInstance(doc, fs);
+                doc.Open();
+                doc.Add(table);
+                while (reader.Read())
+                {
+                    doc.Add(new Paragraph(reader[0].ToString() + reader[1].ToString() + reader[2].ToString()));
+                }
 
-            FileStream fs = new FileStream(Dir + "filename.pdf", FileMode.Create);
-            Document doc = new Document(PageSize.A4);
-            PdfWriter pdfWriter = PdfWriter.GetInstance(doc, fs);
-            doc.Open();
-            doc.Add(table);
+                pdfWriter.CloseStream = true;
+                doc.Close();
 
-            pdfWriter.CloseStream = true;
-            doc.Close();
-            Process.Start(Dir + "filename.pdf");
+                Process.Start("report.pdf");
+            }
 
 
 
@@ -287,8 +353,9 @@ namespace ElectronicSchoolDiary
         {
             FillStudentInfoLabels();
             FillParentInfoLabels();
-            FillStudentMarks();
             FillStudentAbsents();
+            PopulateCoursesComboBox();// ->> Nedded here because fillstudentmarks()  throws error No data exists for the row/column
+            FillStudentMarks();
         }
 
         private void CoursesBox_SelectedIndexChanged(object sender, EventArgs e)

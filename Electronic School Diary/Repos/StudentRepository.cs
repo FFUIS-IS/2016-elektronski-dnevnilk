@@ -14,6 +14,12 @@ namespace ElectronicSchoolDiary.Repos
     {
         private static SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
 
+        public static string GetQuery(int DepartmentId)
+        {
+            string query;
+            query = @"SELECT Name,Surname FROM Students WHERE DepartmentsId =" + DepartmentId;
+            return query;
+        }
         public static string GetNameQuery()
         {
             string query;
@@ -67,42 +73,67 @@ namespace ElectronicSchoolDiary.Repos
 
         public static int GetIdByJmbg(string jmbg)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Students WHERE Jmbg = @jmbg", Connection);
-            command.Parameters.AddWithValue("@jmbg", jmbg);
-            SqlCeDataReader reader = command.ExecuteReader();
+            int result = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Students WHERE Jmbg = @jmbg", Connection);
+                command.Parameters.AddWithValue("@jmbg", jmbg);
+                SqlCeDataReader reader = command.ExecuteReader();
 
-            reader.Read();
-            int result = (int)reader["Id"];
-            reader.Close();
+                reader.Read();
+                 result = (int)reader["Id"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             return result;
         }
         public static Student GetStudentByName(string name, string surname)
         {
-            Student student;
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Jmbg,Address,Phone_number FROM Students WHERE name = @name AND surname = @surname", Connection);
-            command.Parameters.AddWithValue("@name", name);
-            command.Parameters.AddWithValue("@surname", surname);
-            SqlCeDataReader reader = command.ExecuteReader();
+            Student student = null;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Jmbg,Address,Phone_number FROM Students WHERE name = @name AND surname = @surname", Connection);
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@surname", surname);
+                SqlCeDataReader reader = command.ExecuteReader();
 
-            reader.Read();
-            string jmbg = reader["Jmbg"].ToString();
-            string address = reader["Address"].ToString();
-            string phone = reader["Phone_number"].ToString();
-            student = new Student(name, surname,jmbg, address,phone);
-            reader.Close();
+                while (reader.Read())
+                {
+                    string jmbg = reader["Jmbg"].ToString();
+                    string address = reader["Address"].ToString();
+                    string phone = reader["Phone_number"].ToString();
+                    student = new Student(name, surname, jmbg, address, phone);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             return student;
         }
         public static int GetDepartmentIdByStudent(Student student)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT DepartmentsId FROM Students WHERE Jmbg = @jmbg", Connection);
-            command.Parameters.AddWithValue("@jmbg", student.Jmbg);
-            SqlCeDataReader reader = command.ExecuteReader();
+            int depId = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT DepartmentsId FROM Students WHERE Jmbg = @jmbg", Connection);
+                command.Parameters.AddWithValue("@jmbg", student.Jmbg);
+                SqlCeDataReader reader = command.ExecuteReader();
 
-            reader.Read();
-            int depId = (int)reader["DepartmentsId"];
-            reader.Close();
+                reader.Read();
+                 depId = (int)reader["DepartmentsId"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
             return depId;
 
         }

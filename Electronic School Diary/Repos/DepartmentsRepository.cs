@@ -20,45 +20,90 @@ namespace ElectronicSchoolDiary.Repos
             string query;
             query =  @"SELECT Title FROM Departments";
             return query;
-         
+
         }
+        public static int GetIdByTeacherId(int TeachersId)
+        {
+            int result = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE TeachersId = @teachid", Connection);
+                command.Parameters.AddWithValue("@teachid", TeachersId);
+                SqlCeDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+
+                result = (int)reader["Id"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return result;
+        }
+
         public static int GetIdByTitle(int title, int ClassesId)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE Title = @title AND ClassesId = @classid", Connection);
-            command.Parameters.AddWithValue("@title", title);
-            command.Parameters.AddWithValue("@classid", ClassesId);
-            SqlCeDataReader reader = command.ExecuteReader();
+            int result = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE Title = @title AND ClassesId = @classid", Connection);
+                command.Parameters.AddWithValue("@title", title);
+                command.Parameters.AddWithValue("@classid", ClassesId);
+                SqlCeDataReader reader = command.ExecuteReader();
 
-            reader.Read();
+                reader.Read();
 
-            int result = (int)reader["Id"];
-            reader.Close();
+                result = (int)reader["Id"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             return result;
         }
         public static int GetIdByTitle(int title)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE Title = @title", Connection);
-            command.Parameters.AddWithValue("@title", title);
-            SqlCeDataReader reader = command.ExecuteReader();
+            int result = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE Title = @title", Connection);
+                command.Parameters.AddWithValue("@title", title);
+                SqlCeDataReader reader = command.ExecuteReader();
 
-            reader.Read();
+                reader.Read();
 
-            int result = (int)reader["Id"];
-            reader.Close();
-
+                result = (int)reader["Id"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             return result;
         }
         public static int GetTitleById(int id)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Title FROM Departments WHERE Id = @id", Connection);
-            command.Parameters.AddWithValue("@id", id);
-            SqlCeDataReader reader = command.ExecuteReader();
+            int result = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Title FROM Departments WHERE Id = @id", Connection);
+                command.Parameters.AddWithValue("@id", id);
+                SqlCeDataReader reader = command.ExecuteReader();
 
-            reader.Read();
+                reader.Read();
 
-            int result = (int)reader["Title"];
-            reader.Close();
+                result = (int)reader["Title"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             return result;
         }
@@ -94,13 +139,21 @@ namespace ElectronicSchoolDiary.Repos
         }
         public static int GetId(int teacherId)
         {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE TeachersId = @tid", Connection);
-            command.Parameters.AddWithValue("@tid", teacherId);
-            SqlCeDataReader reader = command.ExecuteReader();
+            int result = -1;
+            try
+            {
+                SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Departments WHERE TeachersId = @tid", Connection);
+                command.Parameters.AddWithValue("@tid", teacherId);
+                SqlCeDataReader reader = command.ExecuteReader();
 
-            reader.Read();
-            int result = (int)reader["Id"];
-            reader.Close();
+                reader.Read();
+                result = (int)reader["Id"];
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             return result;
         }
