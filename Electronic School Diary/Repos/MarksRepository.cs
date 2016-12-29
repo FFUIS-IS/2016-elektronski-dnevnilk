@@ -1,11 +1,13 @@
-﻿using System;
+﻿using ElectronicSchoolDiary.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlServerCe;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.SqlServerCe;
 using System.Windows.Forms;
-
+using Microsoft.VisualBasic;
+using System.Text.RegularExpressions;
 
 namespace ElectronicSchoolDiary.Repos
 {
@@ -13,96 +15,59 @@ namespace ElectronicSchoolDiary.Repos
     {
         private static SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
 
-        public static int getMarkQuery()
+       
+        public static string GetMarks(int studentId, int courseId)
         {
-            string markString = @"SELECT Mark FROM Marks";
-            int mark = Int16.Parse(markString);
-            return mark;
-        }
-
-        public static int GetIdByMark(int mark)
-        {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Marks WHERE Mark = @mark", Connection);
-            command.Parameters.AddWithValue("@mark", mark);
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Mark FROM Marks WHERE StudentsId = @studId AND CoursesId = @courseId ORDER BY Date", Connection);
+            command.Parameters.AddWithValue("@studId", studentId);
+            command.Parameters.AddWithValue("@courseId", courseId);
             SqlCeDataReader reader = command.ExecuteReader();
-
-            reader.Read();
-
-            int result = (int)reader["Id"];
-            reader.Close();
-
-            return result;
+            string m = "";
+            while (reader.Read())
+            {
+                m += reader["Mark"].ToString() + " ,";
+            }
+            return m;
         }
-
-        public static DateTime GetDateQuery()
+        public static string GetMarks(int studentId)
         {
-            string dateString = @"SELECT Date FROM Marks";
-            DateTime date = DateTime.Parse(dateString);
-            return date;
-        }
-
-        public static int GetIdByStudentId(int studentId)
-        {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Marks WHERE StudentsId = @studentid", Connection);
-            command.Parameters.AddWithValue("@studentid", studentId);
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Mark FROM Marks WHERE StudentsId = @studId ORDER BY Date", Connection);
+            command.Parameters.AddWithValue("@studId", studentId);
             SqlCeDataReader reader = command.ExecuteReader();
-
-            reader.Read();
-
-            int result = (int)reader["Id"];
-            reader.Close();
-
-            return result;
+            string m = "";
+            while (reader.Read())
+            {
+                m += reader["Mark"].ToString() + " ,";
+            }
+            return m;
         }
 
-        public static int GetIdByCoursesId(int courseId)
-        {
-            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Marks WHERE CoursesId = @courseid", Connection);
-            command.Parameters.AddWithValue("@courseid", courseId);
-            SqlCeDataReader reader = command.ExecuteReader();
-
-            reader.Read();
-
-            int result = (int)reader["Id"];
-            reader.Close();
-
-            return result;
-        }
-
-        public static bool AddMark(int Mark, DateTime Date, int StudentId, int CourseId)
+        public static bool InsertMark(int mark, int studentsId, int coursesId)
         {
             bool flag = false;
-
             try
             {
-                if(Mark < 1 || Mark > 5)
-                {
-                    MessageBox.Show("Ocjena mora biti izmedju 1 i 5!");
-                }
-                int studentId = StudentRepository.GetIdByNumber(StudentId);
-                int courseId = CoursesRepository.GetIdByClassesId(CourseId);
-                SqlCeCommand command1 = new SqlCeCommand(@"INSERT INTO Marks(Mark, Date, StudentId, CourseId)
-                    VALUES (@mark, @date, @studentId, @courseId)", Connection);
-                command1.Parameters.AddWithValue("@mark", Mark);
-                command1.Parameters.AddWithValue("@date", Date);
-                command1.Parameters.AddWithValue("@studentId", studentId);
-                command1.Parameters.AddWithValue("@courseId", courseId);
-                int result = command1.ExecuteNonQuery();
-                if(result > 0)
+
+                SqlCeCommand command = new SqlCeCommand(@"INSERT INTO Marks (Mark, Date, StudentsId, CoursesId)
+                    VALUES (@mark, @date, @studentsid, @coursesid)", Connection);
+                command.Parameters.AddWithValue("@mark", mark);
+                command.Parameters.AddWithValue("@date", DateTime.Now);
+                command.Parameters.AddWithValue("@studentsid", studentsId);
+                command.Parameters.AddWithValue("@coursesid", coursesId);
+                int result = command.ExecuteNonQuery();
+                if (result > 0)
                 {
                     flag = true;
-                    MessageBox.Show("Ocjena je uspjesno dodata!");
+                    MessageBox.Show("Ocjena  : " + mark + " je uspješno dodata !");
                 }
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                flag = false;
                 MessageBox.Show(ex.Message);
             }
             return flag;
         }
-
-
-
-
     }
 }
