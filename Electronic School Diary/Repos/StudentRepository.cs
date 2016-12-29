@@ -27,6 +27,18 @@ namespace ElectronicSchoolDiary.Repos
             query = @"SELECT Name,Surname FROM Students";
             return query;
         }
+        public static string GetStudentIds( int departmentId)
+        {
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Students WHERE DepartmentsId = @depid", Connection);
+            command.Parameters.AddWithValue("@depid", departmentId);
+            SqlCeDataReader reader = command.ExecuteReader();
+            string m = "";
+            while (reader.Read())
+            {
+                m += reader["Id"].ToString() + " ,";
+            }
+            return m.TrimEnd(',');
+        }
         public static bool AddStudent(string StudentName, string StudentSurname, string Jmbg, string Address, string Phone_number,int departmentsId)
         {
             bool flag = false;

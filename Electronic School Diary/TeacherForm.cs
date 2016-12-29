@@ -39,45 +39,59 @@ namespace ElectronicSchoolDiary
         }
         private void TeacherForm_Load(object sender, EventArgs e)
         {
+            CenterToParent();
             PasswordPanel.Hide();
             ControlBox = false;
             TrueFalseAbsentComboBox.SelectedIndex = 1;
             AbsentHourComboBox.SelectedIndex = 0;
             MarkComboBox.SelectedIndex = 0;
-            PopulateStudentsComboBox();
-            PopulateCoursesComboBox();
-            FillStudentInfoLabels();
-            FillParentInfoLabels();
-            FillStudentMarks();
-            FillStudentAbsents();
+            ParentMeetingDateTimePicker.MinDate = DateTime.Now;
+            TimeComboBox.SelectedIndex = 0;
+            bool isStudentsAdded =  PopulateStudentsComboBox();
+            if (isStudentsAdded)
+            {
+                FillStudentInfoLabels();
+                FillParentInfoLabels();
+                FillStudentAbsents();
+               bool isCoursesAdded =  PopulateCoursesComboBox();
+                if (isCoursesAdded)
+                {
+                    FillStudentMarks();
+                }
+            }
         }
-        private void PopulateStudentsComboBox()
+        private bool PopulateStudentsComboBox()
         {
+            bool flag = false;
             try
             {
                 int TeacherId = CurrentTeacher.Id;
                 int DepartmentId = DepartmentsRepository.GetIdByTeacherId(TeacherId);
                 string Name = StudentRepository.GetQuery(DepartmentId);
                 Lists.FillDropDownList2(Name, "Name", Name, "Surname", StudentsBox);
+                flag = true;
             }
             catch(Exception e)
-            {
+            {   
                 MessageBox.Show(e.Message);
             }
+            return flag;
         }  
-        private void PopulateCoursesComboBox()
+        private bool PopulateCoursesComboBox()
         {
+            bool flag = false;
             try
             { 
-
                string CoursesId = Teachers_Departments_CoursesRepository.GetCoursesId(CurrentTeacher.Id);
                string Title = CoursesRepository.GetQuery("(" + CoursesId.TrimEnd(',')+ ")");
                Lists.FillDropDownList1(Title, "Title", CoursesBox);
+                flag = true;
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
+            return flag;
         }
         private Student CurrentStudent()
         {
@@ -278,12 +292,12 @@ namespace ElectronicSchoolDiary
                     int unJustifiedAbsents = AbsentsRepository.GetAbsents((int)reader["Id"], 0);
                     int sum = justifiedAbsents + unJustifiedAbsents;
 
-                    string CoursesId = Teachers_Departments_CoursesRepository.GetCoursesId(CurrentTeacher.Id).Trim(',');
+                    string CoursesId = CoursesRepository.GetCoursesId();
                     string[] parts = CoursesId.Split(',');
                     int suum = 0;
                     for (int i = 0; i < parts.Length ; i++)
                     {
-                        string marks = MarksRepository.GetMarks((int)reader["Id"], int.Parse(parts[i]));
+                        string marks = MarksRepository.GetMarks((int)reader["Id"]);
                         string[] particles = marks.Split(',');
                         double mark =  Math.Round(float.Parse(CalculateAverageGrade(particles)), MidpointRounding.AwayFromZero);
                       
@@ -308,9 +322,9 @@ namespace ElectronicSchoolDiary
             }
             LoginForm logf = new LoginForm();
             string Dir = logf.GetHomeDirectory();
-          
+            
                     FileStream fs = new FileStream("report.pdf", FileMode.Create);
-
+                    
                     Document doc = new Document(PageSize.A4);
                     PdfWriter pdfWriter = PdfWriter.GetInstance(doc, fs);
                     doc.Open();
@@ -404,6 +418,45 @@ namespace ElectronicSchoolDiary
             {
                 FillStudentAbsents();
             }
+        }
+        private void SendEmail(string confirmed_canceled)
+        {
+            string date = ParentMeetingDateTimePicker.Value.ToShortDateString();
+            string time = TimeComboBox.Text;
+            string SchoolMail = "ednevniik@gmail.com";
+            string SchoolName = "Skola";
+            string SchoolMailPassword = "ednevnikus";
+
+            int TeacherId = CurrentTeacher.Id;
+            int DepartmentId = DepartmentsRepository.GetIdByTeacherId(TeacherId);
+            string StudentIds = StudentRepository.GetStudentIds(DepartmentId);
+            string[] parts = StudentIds.Split(',');
+            Email email = new Email();
+            for (int i = 0; i < parts.Length; i++)
+            {
+                Parent CurrentParent = ParentRepository.GetParentByStudentId(int.Parse(parts[i]));
+                string currentParentEmail = CurrentParent.Email;
+                string currentParentName = CurrentParent.Name;
+                string message = "Poštovani " + CurrentParent.Name + " " + CurrentParent.Surname + "\n"
+                    + "Obavještavam Vas da je" + " " + confirmed_canceled + " " + "roditeljski sastanak dana " + date + " u " + time
+                    + "\n" + "Nastavnik : " + CurrentTeacher.Name + " " + CurrentTeacher.Surname
+                    ;
+                email.SendEmailInBackground(SchoolMail, SchoolName, SchoolMailPassword, currentParentEmail, currentParentName, message);
+            }
+            MessageBox.Show("Roditelji su uspješno obaviješteni");
+           
+        }
+
+        private void ConfirmMeetingRoundedButton_Click(object sender, EventArgs e)
+        {
+            SendEmail("zakazan");
+            CancelMeetingRoundedButton.Show();
+        }
+
+        private void CancelMeetingRoundedButton_Click(object sender, EventArgs e)
+        {
+            SendEmail("otkazan");
+            CancelMeetingRoundedButton.Hide();
         }
     }
 }

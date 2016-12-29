@@ -77,5 +77,6 @@ namespace ElectronicSchoolDiary.Repos
 
             return parent;
         }
+
     }
 }

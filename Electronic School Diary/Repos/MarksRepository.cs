@@ -29,7 +29,19 @@ namespace ElectronicSchoolDiary.Repos
             }
             return m;
         }
-       
+        public static string GetMarks(int studentId)
+        {
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Mark FROM Marks WHERE StudentsId = @studId ORDER BY Date", Connection);
+            command.Parameters.AddWithValue("@studId", studentId);
+            SqlCeDataReader reader = command.ExecuteReader();
+            string m = "";
+            while (reader.Read())
+            {
+                m += reader["Mark"].ToString() + " ,";
+            }
+            return m;
+        }
+
         public static bool InsertMark(int mark, int studentsId, int coursesId)
         {
             bool flag = false;

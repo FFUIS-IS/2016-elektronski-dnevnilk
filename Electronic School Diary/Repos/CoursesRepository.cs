@@ -27,8 +27,18 @@ namespace ElectronicSchoolDiary.Repos
             query = @"SELECT Title FROM Courses WHERE Id IN" + CoursesIds;
             return query;
         }
-       
-        
+
+        public static string GetCoursesId()
+        {
+            SqlCeCommand command = new SqlCeCommand(@"SELECT Id FROM Courses", Connection);
+            SqlCeDataReader reader = command.ExecuteReader();
+            string coursesid = "";
+            while (reader.Read())
+            {
+                coursesid += reader["Id"].ToString() + " ,";
+            }
+            return coursesid;
+        }
         public static int GetIdByClassesId(int classesId)
         {
             int result = -1;

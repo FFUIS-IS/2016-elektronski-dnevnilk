@@ -72,11 +72,12 @@
             this.label31 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.PasswordPanel = new System.Windows.Forms.Panel();
+            this.TimeComboBox = new System.Windows.Forms.ComboBox();
+            this.ParentMeetingDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.CancelMeetingRoundedButton = new ElectronicSchoolDiary.RoundedButton();
             this.ConfirmMeetingRoundedButton = new ElectronicSchoolDiary.RoundedButton();
             this.label43 = new System.Windows.Forms.Label();
             this.label42 = new System.Windows.Forms.Label();
-            this.ParentsMeetingMonthCalendar = new System.Windows.Forms.MonthCalendar();
             this.AddTeacherPasswordButton = new ElectronicSchoolDiary.RoundedButton();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -105,6 +106,7 @@
             this.StudentsBox = new System.Windows.Forms.ComboBox();
             this.CoursesBox = new System.Windows.Forms.ComboBox();
             this.MarkComboBox = new System.Windows.Forms.ComboBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.PasswordPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -232,7 +234,7 @@
             this.TrueFalseAbsentComboBox.Items.AddRange(new object[] {
             "Opravdano",
             "Neopravdano"});
-            this.TrueFalseAbsentComboBox.Location = new System.Drawing.Point(803, 289);
+            this.TrueFalseAbsentComboBox.Location = new System.Drawing.Point(807, 289);
             this.TrueFalseAbsentComboBox.Name = "TrueFalseAbsentComboBox";
             this.TrueFalseAbsentComboBox.Size = new System.Drawing.Size(85, 21);
             this.TrueFalseAbsentComboBox.TabIndex = 6;
@@ -258,7 +260,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(459, 127);
+            this.label10.Location = new System.Drawing.Point(465, 127);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(41, 13);
             this.label10.TabIndex = 23;
@@ -294,7 +296,7 @@
             "5",
             "6",
             "7"});
-            this.AbsentHourComboBox.Location = new System.Drawing.Point(803, 255);
+            this.AbsentHourComboBox.Location = new System.Drawing.Point(807, 255);
             this.AbsentHourComboBox.Name = "AbsentHourComboBox";
             this.AbsentHourComboBox.Size = new System.Drawing.Size(82, 21);
             this.AbsentHourComboBox.TabIndex = 5;
@@ -302,7 +304,7 @@
             // MarksLabel
             // 
             this.MarksLabel.AutoSize = true;
-            this.MarksLabel.Location = new System.Drawing.Point(410, 172);
+            this.MarksLabel.Location = new System.Drawing.Point(416, 172);
             this.MarksLabel.Name = "MarksLabel";
             this.MarksLabel.Size = new System.Drawing.Size(41, 13);
             this.MarksLabel.TabIndex = 34;
@@ -312,7 +314,7 @@
             // JustifiedAbsentLabel
             // 
             this.JustifiedAbsentLabel.AutoSize = true;
-            this.JustifiedAbsentLabel.Location = new System.Drawing.Point(659, 210);
+            this.JustifiedAbsentLabel.Location = new System.Drawing.Point(663, 210);
             this.JustifiedAbsentLabel.Name = "JustifiedAbsentLabel";
             this.JustifiedAbsentLabel.Size = new System.Drawing.Size(41, 13);
             this.JustifiedAbsentLabel.TabIndex = 35;
@@ -322,7 +324,7 @@
             // UnjustifiedAbsentLabel
             // 
             this.UnjustifiedAbsentLabel.AutoSize = true;
-            this.UnjustifiedAbsentLabel.Location = new System.Drawing.Point(778, 210);
+            this.UnjustifiedAbsentLabel.Location = new System.Drawing.Point(782, 210);
             this.UnjustifiedAbsentLabel.Name = "UnjustifiedAbsentLabel";
             this.UnjustifiedAbsentLabel.Size = new System.Drawing.Size(41, 13);
             this.UnjustifiedAbsentLabel.TabIndex = 36;
@@ -341,7 +343,7 @@
             // ParentPhoneLabel
             // 
             this.ParentPhoneLabel.AutoSize = true;
-            this.ParentPhoneLabel.Location = new System.Drawing.Point(280, 303);
+            this.ParentPhoneLabel.Location = new System.Drawing.Point(267, 303);
             this.ParentPhoneLabel.Name = "ParentPhoneLabel";
             this.ParentPhoneLabel.Size = new System.Drawing.Size(41, 13);
             this.ParentPhoneLabel.TabIndex = 43;
@@ -350,7 +352,7 @@
             // ParentAddressLabel
             // 
             this.ParentAddressLabel.AutoSize = true;
-            this.ParentAddressLabel.Location = new System.Drawing.Point(280, 213);
+            this.ParentAddressLabel.Location = new System.Drawing.Point(267, 213);
             this.ParentAddressLabel.Name = "ParentAddressLabel";
             this.ParentAddressLabel.Size = new System.Drawing.Size(41, 13);
             this.ParentAddressLabel.TabIndex = 41;
@@ -359,7 +361,7 @@
             // ParentEmailLabel
             // 
             this.ParentEmailLabel.AutoSize = true;
-            this.ParentEmailLabel.Location = new System.Drawing.Point(280, 258);
+            this.ParentEmailLabel.Location = new System.Drawing.Point(267, 258);
             this.ParentEmailLabel.Name = "ParentEmailLabel";
             this.ParentEmailLabel.Size = new System.Drawing.Size(41, 13);
             this.ParentEmailLabel.TabIndex = 40;
@@ -368,7 +370,7 @@
             // ParentNameLabel
             // 
             this.ParentNameLabel.AutoSize = true;
-            this.ParentNameLabel.Location = new System.Drawing.Point(280, 127);
+            this.ParentNameLabel.Location = new System.Drawing.Point(267, 127);
             this.ParentNameLabel.Name = "ParentNameLabel";
             this.ParentNameLabel.Size = new System.Drawing.Size(35, 13);
             this.ParentNameLabel.TabIndex = 39;
@@ -377,7 +379,7 @@
             // ParentSurnameLabel
             // 
             this.ParentSurnameLabel.AutoSize = true;
-            this.ParentSurnameLabel.Location = new System.Drawing.Point(280, 172);
+            this.ParentSurnameLabel.Location = new System.Drawing.Point(267, 172);
             this.ParentSurnameLabel.Name = "ParentSurnameLabel";
             this.ParentSurnameLabel.Size = new System.Drawing.Size(35, 13);
             this.ParentSurnameLabel.TabIndex = 38;
@@ -386,7 +388,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(217, 303);
+            this.label21.Location = new System.Drawing.Point(204, 303);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(43, 13);
             this.label21.TabIndex = 48;
@@ -395,7 +397,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(217, 258);
+            this.label22.Location = new System.Drawing.Point(204, 258);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(32, 13);
             this.label22.TabIndex = 47;
@@ -404,7 +406,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(217, 213);
+            this.label23.Location = new System.Drawing.Point(204, 213);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(40, 13);
             this.label23.TabIndex = 46;
@@ -413,7 +415,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(217, 172);
+            this.label24.Location = new System.Drawing.Point(204, 172);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(44, 13);
             this.label24.TabIndex = 45;
@@ -422,7 +424,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(217, 127);
+            this.label25.Location = new System.Drawing.Point(204, 127);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(24, 13);
             this.label25.TabIndex = 44;
@@ -435,7 +437,7 @@
             this.label19.ForeColor = System.Drawing.Color.Gold;
             this.label19.Location = new System.Drawing.Point(9, 111);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(892, 2);
+            this.label19.Size = new System.Drawing.Size(900, 2);
             this.label19.TabIndex = 49;
             // 
             // label20
@@ -453,7 +455,7 @@
             this.label26.BackColor = System.Drawing.Color.Gold;
             this.label26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label26.ForeColor = System.Drawing.Color.Gold;
-            this.label26.Location = new System.Drawing.Point(209, 110);
+            this.label26.Location = new System.Drawing.Point(203, 110);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(2, 260);
             this.label26.TabIndex = 51;
@@ -463,7 +465,7 @@
             this.label27.BackColor = System.Drawing.Color.Gold;
             this.label27.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label27.ForeColor = System.Drawing.Color.Gold;
-            this.label27.Location = new System.Drawing.Point(402, 110);
+            this.label27.Location = new System.Drawing.Point(408, 110);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(2, 260);
             this.label27.TabIndex = 52;
@@ -473,7 +475,7 @@
             this.label28.BackColor = System.Drawing.Color.Gold;
             this.label28.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label28.ForeColor = System.Drawing.Color.Gold;
-            this.label28.Location = new System.Drawing.Point(640, 112);
+            this.label28.Location = new System.Drawing.Point(644, 112);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(2, 260);
             this.label28.TabIndex = 53;
@@ -483,7 +485,7 @@
             this.label29.BackColor = System.Drawing.Color.Gold;
             this.label29.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label29.ForeColor = System.Drawing.Color.Gold;
-            this.label29.Location = new System.Drawing.Point(899, 113);
+            this.label29.Location = new System.Drawing.Point(909, 113);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(2, 260);
             this.label29.TabIndex = 54;
@@ -493,7 +495,7 @@
             this.label30.BackColor = System.Drawing.Color.Gold;
             this.label30.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label30.ForeColor = System.Drawing.Color.Gold;
-            this.label30.Location = new System.Drawing.Point(9, 370);
+            this.label30.Location = new System.Drawing.Point(13, 370);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(892, 2);
             this.label30.TabIndex = 55;
@@ -503,7 +505,7 @@
             this.label31.BackColor = System.Drawing.Color.Gold;
             this.label31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label31.ForeColor = System.Drawing.Color.Gold;
-            this.label31.Location = new System.Drawing.Point(642, 198);
+            this.label31.Location = new System.Drawing.Point(646, 198);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(259, 2);
             this.label31.TabIndex = 56;
@@ -513,18 +515,19 @@
             this.label32.BackColor = System.Drawing.Color.Gold;
             this.label32.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label32.ForeColor = System.Drawing.Color.Gold;
-            this.label32.Location = new System.Drawing.Point(770, 152);
+            this.label32.Location = new System.Drawing.Point(774, 152);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(2, 84);
             this.label32.TabIndex = 57;
             // 
             // PasswordPanel
             // 
+            this.PasswordPanel.Controls.Add(this.TimeComboBox);
+            this.PasswordPanel.Controls.Add(this.ParentMeetingDateTimePicker);
             this.PasswordPanel.Controls.Add(this.CancelMeetingRoundedButton);
             this.PasswordPanel.Controls.Add(this.ConfirmMeetingRoundedButton);
             this.PasswordPanel.Controls.Add(this.label43);
             this.PasswordPanel.Controls.Add(this.label42);
-            this.PasswordPanel.Controls.Add(this.ParentsMeetingMonthCalendar);
             this.PasswordPanel.Controls.Add(this.AddTeacherPasswordButton);
             this.PasswordPanel.Controls.Add(this.label14);
             this.PasswordPanel.Controls.Add(this.label15);
@@ -533,32 +536,65 @@
             this.PasswordPanel.Controls.Add(this.NewPassTextBox);
             this.PasswordPanel.Controls.Add(this.OldPassTextBox);
             this.PasswordPanel.Controls.Add(this.label17);
-            this.PasswordPanel.Location = new System.Drawing.Point(9, 51);
+            this.PasswordPanel.Location = new System.Drawing.Point(4, 46);
             this.PasswordPanel.Name = "PasswordPanel";
             this.PasswordPanel.Size = new System.Drawing.Size(905, 405);
             this.PasswordPanel.TabIndex = 58;
+            // 
+            // TimeComboBox
+            // 
+            this.TimeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TimeComboBox.FormattingEnabled = true;
+            this.TimeComboBox.Items.AddRange(new object[] {
+            "08:00 h",
+            "09:00 h",
+            "10:00 h\t",
+            "11:00 h\t",
+            "12:00 h\t",
+            "13:00 h\t",
+            "14:00 h \t",
+            "15:00 h\t",
+            "16:00 h",
+            "17:00 h",
+            "18:00 h ",
+            "19:00 h",
+            "20:00 h"});
+            this.TimeComboBox.Location = new System.Drawing.Point(165, 134);
+            this.TimeComboBox.Name = "TimeComboBox";
+            this.TimeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.TimeComboBox.TabIndex = 75;
+            // 
+            // ParentMeetingDateTimePicker
+            // 
+            this.ParentMeetingDateTimePicker.Location = new System.Drawing.Point(120, 101);
+            this.ParentMeetingDateTimePicker.MinDate = new System.DateTime(2016, 12, 25, 0, 0, 0, 0);
+            this.ParentMeetingDateTimePicker.Name = "ParentMeetingDateTimePicker";
+            this.ParentMeetingDateTimePicker.Size = new System.Drawing.Size(200, 20);
+            this.ParentMeetingDateTimePicker.TabIndex = 74;
             // 
             // CancelMeetingRoundedButton
             // 
             this.CancelMeetingRoundedButton.BackColor = System.Drawing.Color.Crimson;
             this.CancelMeetingRoundedButton.ForeColor = System.Drawing.Color.White;
-            this.CancelMeetingRoundedButton.Location = new System.Drawing.Point(52, 290);
+            this.CancelMeetingRoundedButton.Location = new System.Drawing.Point(62, 179);
             this.CancelMeetingRoundedButton.Name = "CancelMeetingRoundedButton";
             this.CancelMeetingRoundedButton.Size = new System.Drawing.Size(150, 23);
             this.CancelMeetingRoundedButton.TabIndex = 73;
             this.CancelMeetingRoundedButton.Text = "Otkažite sastanak";
             this.CancelMeetingRoundedButton.UseVisualStyleBackColor = false;
             this.CancelMeetingRoundedButton.Visible = false;
+            this.CancelMeetingRoundedButton.Click += new System.EventHandler(this.CancelMeetingRoundedButton_Click);
             // 
             // ConfirmMeetingRoundedButton
             // 
             this.ConfirmMeetingRoundedButton.BackColor = System.Drawing.Color.MediumSpringGreen;
-            this.ConfirmMeetingRoundedButton.Location = new System.Drawing.Point(257, 290);
+            this.ConfirmMeetingRoundedButton.Location = new System.Drawing.Point(254, 179);
             this.ConfirmMeetingRoundedButton.Name = "ConfirmMeetingRoundedButton";
             this.ConfirmMeetingRoundedButton.Size = new System.Drawing.Size(150, 23);
             this.ConfirmMeetingRoundedButton.TabIndex = 72;
             this.ConfirmMeetingRoundedButton.Text = "Potvrdite sastanak";
             this.ConfirmMeetingRoundedButton.UseVisualStyleBackColor = false;
+            this.ConfirmMeetingRoundedButton.Click += new System.EventHandler(this.ConfirmMeetingRoundedButton_Click);
             // 
             // label43
             // 
@@ -579,14 +615,6 @@
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(2, 260);
             this.label42.TabIndex = 70;
-            // 
-            // ParentsMeetingMonthCalendar
-            // 
-            this.ParentsMeetingMonthCalendar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ParentsMeetingMonthCalendar.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
-            this.ParentsMeetingMonthCalendar.Location = new System.Drawing.Point(113, 99);
-            this.ParentsMeetingMonthCalendar.Name = "ParentsMeetingMonthCalendar";
-            this.ParentsMeetingMonthCalendar.TabIndex = 69;
             // 
             // AddTeacherPasswordButton
             // 
@@ -664,7 +692,7 @@
             this.label33.BackColor = System.Drawing.Color.Gold;
             this.label33.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label33.ForeColor = System.Drawing.Color.Gold;
-            this.label33.Location = new System.Drawing.Point(530, 113);
+            this.label33.Location = new System.Drawing.Point(536, 113);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(2, 85);
             this.label33.TabIndex = 59;
@@ -672,7 +700,7 @@
             // AverageMarkLabel
             // 
             this.AverageMarkLabel.AutoSize = true;
-            this.AverageMarkLabel.Location = new System.Drawing.Point(559, 172);
+            this.AverageMarkLabel.Location = new System.Drawing.Point(565, 172);
             this.AverageMarkLabel.Name = "AverageMarkLabel";
             this.AverageMarkLabel.Size = new System.Drawing.Size(41, 13);
             this.AverageMarkLabel.TabIndex = 61;
@@ -681,7 +709,7 @@
             // label35
             // 
             this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(543, 127);
+            this.label35.Location = new System.Drawing.Point(549, 127);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(91, 13);
             this.label35.TabIndex = 60;
@@ -692,7 +720,7 @@
             this.label34.BackColor = System.Drawing.Color.Gold;
             this.label34.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label34.ForeColor = System.Drawing.Color.Gold;
-            this.label34.Location = new System.Drawing.Point(640, 150);
+            this.label34.Location = new System.Drawing.Point(646, 150);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(259, 2);
             this.label34.TabIndex = 62;
@@ -702,7 +730,7 @@
             this.label36.BackColor = System.Drawing.Color.Gold;
             this.label36.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label36.ForeColor = System.Drawing.Color.Gold;
-            this.label36.Location = new System.Drawing.Point(642, 234);
+            this.label36.Location = new System.Drawing.Point(646, 234);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(259, 2);
             this.label36.TabIndex = 63;
@@ -710,7 +738,7 @@
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(659, 258);
+            this.label37.Location = new System.Drawing.Point(663, 258);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(109, 13);
             this.label37.TabIndex = 64;
@@ -719,7 +747,7 @@
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(659, 289);
+            this.label38.Location = new System.Drawing.Point(663, 289);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(130, 13);
             this.label38.TabIndex = 65;
@@ -730,7 +758,7 @@
             this.label39.BackColor = System.Drawing.Color.Gold;
             this.label39.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label39.ForeColor = System.Drawing.Color.Gold;
-            this.label39.Location = new System.Drawing.Point(403, 150);
+            this.label39.Location = new System.Drawing.Point(409, 150);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(238, 2);
             this.label39.TabIndex = 66;
@@ -740,7 +768,7 @@
             this.label40.BackColor = System.Drawing.Color.Gold;
             this.label40.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label40.ForeColor = System.Drawing.Color.Gold;
-            this.label40.Location = new System.Drawing.Point(403, 198);
+            this.label40.Location = new System.Drawing.Point(409, 198);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(238, 2);
             this.label40.TabIndex = 67;
@@ -748,7 +776,7 @@
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(418, 258);
+            this.label41.Location = new System.Drawing.Point(424, 258);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(82, 13);
             this.label41.TabIndex = 68;
@@ -776,7 +804,7 @@
             // 
             // AddAbsentButton
             // 
-            this.AddAbsentButton.Location = new System.Drawing.Point(688, 323);
+            this.AddAbsentButton.Location = new System.Drawing.Point(692, 323);
             this.AddAbsentButton.Name = "AddAbsentButton";
             this.AddAbsentButton.Size = new System.Drawing.Size(162, 23);
             this.AddAbsentButton.TabIndex = 29;
@@ -786,7 +814,7 @@
             // 
             // AddMarkButton
             // 
-            this.AddMarkButton.Location = new System.Drawing.Point(480, 323);
+            this.AddMarkButton.Location = new System.Drawing.Point(486, 323);
             this.AddMarkButton.Name = "AddMarkButton";
             this.AddMarkButton.Size = new System.Drawing.Size(120, 23);
             this.AddMarkButton.TabIndex = 4;
@@ -870,7 +898,7 @@
             "3",
             "4",
             "5"});
-            this.MarkComboBox.Location = new System.Drawing.Point(536, 255);
+            this.MarkComboBox.Location = new System.Drawing.Point(542, 255);
             this.MarkComboBox.Name = "MarkComboBox";
             this.MarkComboBox.Size = new System.Drawing.Size(85, 21);
             this.MarkComboBox.TabIndex = 3;
@@ -1018,7 +1046,6 @@
         private RoundedButton ConfirmMeetingRoundedButton;
         private System.Windows.Forms.Label label43;
         private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.MonthCalendar ParentsMeetingMonthCalendar;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label AverageMarkLabel;
         private System.Windows.Forms.Label label35;
@@ -1036,5 +1063,8 @@
         private System.Windows.Forms.ComboBox StudentsBox;
         private System.Windows.Forms.ComboBox CoursesBox;
         private System.Windows.Forms.ComboBox MarkComboBox;
+        private System.Windows.Forms.DateTimePicker ParentMeetingDateTimePicker;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ComboBox TimeComboBox;
     }
 }
