@@ -6,8 +6,8 @@
 facilitate and expand use of class book. 
 
 ## Prerequisites
-* [Microsoft Visual studio]( https://www.visualstudio.com )
-* [SqlCE - SQL Compact](https://github.com/ErikEJ/SqlCeToolbox) (can be used any sql database managment software)
+* [Microsoft Visual Studio]( https://www.visualstudio.com )
+* [SqlCE - SQL Compact](https://github.com/ErikEJ/SqlCeToolbox) (can be used any sql database managment [systems](https://en.wikipedia.org/wiki/Category:Database_management_systems))
 
 ## Installing
  You can use any software for making instaler such as :
@@ -24,7 +24,7 @@ Our instaler is [here]().
 * Difference between traditional approach and electronic is that second one is faster, so techers can devote more time to  work with students.
 * Thanks to the use of electronic diary in teaching there is no partiality in relationship with students
 
-## Tasks
+## Possibilities of software
 
 1. Electronic marks archive
 1. Electronic marks entries 
@@ -37,14 +37,14 @@ Our instaler is [here]().
 1. Statistics for department council
 1. Statistics by coruses
       
-### Who has access to Electronic school diary?
+### Who has access to software?
 *  Director has full access to electronic diary
 *  Teachers has access only to data which belongs to students who attend his courses
 *  Class teachers has same privilegies as teacher, but in addition they have access to all data which belongs to students at his department
 *  Administration has access to initial data entries into database
         
 ## Structure
-* Electronic diary consists of students database and GUI (Graphical User Interface) which varies with respect to client privileges
+* Electronic diary consists of SQL database and GUI (Graphical User Interface) which varies with respect to client privileges
   
 ## Built With
 * [Microsoft Visual Studio]( https://www.visualstudio.com )
