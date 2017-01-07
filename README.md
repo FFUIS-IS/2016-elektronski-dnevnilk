@@ -16,7 +16,7 @@ facilitate and expand use of class book.
 1. [WIX](http://wixtoolset.org/releases/)
 1. [Advanced Instaler](http://www.advancedinstaller.com/)
 
-Our instaler is [here](). 
+Our installation files and instructions are [here](https://github.com/FFUIS-IS/2016-school-journal/blob/master/Instalation%20files.zip). 
 
 ## Why it was built?
 
@@ -26,21 +26,20 @@ Our instaler is [here]().
 
 ## Possibilities of software
 
-1. Electronic marks archive
 1. Electronic marks entries 
 1. Electronic absents entries 
 1. Electronic concluding ratings
-1. E-mail notifications for parents about state of students
-1. E-mail notifications for parent meetings ( School must register gmail account and enable less secure apps access it )
-1. Printable certificate for students
-1. Statistics for class teachers
-1. Statistics for department council
-1. Statistics by coruses
-      
+1. E-mail notifications for parent meetings
+1. Statistics for teachers
+1. Printable certificate for students *
+1. Statistics for department council *
+1. Statistics by coruses *
+
+* (*) Not yet developed
+
 ### Who has access to software?
-*  Director has full access to electronic diary
+*  Director has access to all data which belong to administration and teachers 
 *  Teachers has access only to data which belongs to students who attend his courses
-*  Class teachers has same privilegies as teacher, but in addition they have access to all data which belongs to students at his department
 *  Administration has access to initial data entries into database
         
 ## Structure
@@ -48,6 +47,7 @@ Our instaler is [here]().
   
 ## Built With
 * [Microsoft Visual Studio]( https://www.visualstudio.com )
+* [C#](https://en.wikipedia.org/wiki/C_Sharp_(programming_language))
 * [Sql](https://sr.wikipedia.org/sr-el/SQL)
 
 ### Authors :
