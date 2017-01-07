@@ -16,7 +16,7 @@ facilitate and expand use of class book.
 1. [WIX](http://wixtoolset.org/releases/)
 1. [Advanced Instaler](http://www.advancedinstaller.com/)
 
-Our installation files and instructions are [here](https://github.com/FFUIS-IS/2016-school-journal/blob/master/Instalation%20files.zip). 
+Setup files and instructions - [Download](https://github.com/FFUIS-IS/2016-school-journal/blob/master/Instalation%20files.zip). 
 
 ## Why it was built?
 
