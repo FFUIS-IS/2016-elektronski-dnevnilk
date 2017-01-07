@@ -1,5 +1,6 @@
-# Information system : Electronic school diary                                        
 
+[![FFUIS](http://raspored.ffuis.edu.ba/Content/images/pecat-filozofski.svg)](http://ffuis.edu.ba/) 
+# Information system : Electronic school diary      
 
 ## Getting Started                                      
 * Goal of this project is to digitalize process of official records about class departments in school,
@@ -35,7 +36,7 @@ Setup files and instructions - [Download](https://github.com/FFUIS-IS/2016-schoo
 1. Statistics for department council *
 1. Statistics by coruses *
 
-* (*) Not yet developed
+(*) Not yet developed
 
 ### Who has access to software?
 *  Director has access to all data which belong to administration and teachers 
