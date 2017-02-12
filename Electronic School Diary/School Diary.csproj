@@ -51,18 +51,6 @@
   <PropertyGroup>
     <ApplicationIcon>book.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>B080C33B7606A5602F70254EDBBF303BAC895D81</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>School Diary_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>

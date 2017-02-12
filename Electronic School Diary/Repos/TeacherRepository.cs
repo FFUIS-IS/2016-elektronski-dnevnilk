@@ -14,6 +14,13 @@ namespace ElectronicSchoolDiary.Repos
     {
         private static SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
 
+        public static int GetIdQuery()
+        {
+            string query = @"SELECT Id FROM Teachers";
+            int id = Int16.Parse(query);
+            return id;
+        }
+
         public static string GetNameQuery()
         {
             string query;

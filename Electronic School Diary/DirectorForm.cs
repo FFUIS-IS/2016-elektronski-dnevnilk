@@ -9,6 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Security.Permissions;
+using System.Diagnostics;
+using System.Data.SqlServerCe;
 
 namespace ElectronicSchoolDiary
 {
@@ -16,6 +24,7 @@ namespace ElectronicSchoolDiary
     {
         private User CurrentUser;
         private Director CurrentDirector;
+        private static SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
 
         public void warning()
         {
@@ -125,9 +134,116 @@ namespace ElectronicSchoolDiary
             DepartmentsPanel.Hide();
         }
 
+        public string CalculateAverageGrade(string[] parts)
+        {
+            float sum = 0;
+            for (int i = 0; i < parts.Length - 1; i++)
+            {
+                sum += float.Parse(parts[i]);
+            }
+            float average = sum / (parts.Length - 1);
+
+            return average.ToString("0.00");
+        }
+
         private void CertificateRoundedButton_Click(object sender, EventArgs e)
         {
+            int columnNumber = 6;
+            PdfPTable table = new PdfPTable(columnNumber)
+            {
+                //actual width of table in points
+                TotalWidth = 400f,
+                //fix the absolute width of the table
+                LockedWidth = true
+            };
 
+            //relative col widths in proportions - 1/3 and 2/3
+            float[] widths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f };
+            table.SetWidths(widths);
+            table.HorizontalAlignment = 0;
+            //leave a gap before and after the table
+            table.SpacingBefore = 20f;
+            table.SpacingAfter = 30f;
+            PdfPCell cell = new PdfPCell(new Phrase("Ucenici"))
+            {
+                Colspan = columnNumber,
+                Border = 0,
+                HorizontalAlignment = 1
+            };
+            table.AddCell(cell);
+
+            table.AddCell("Ime");
+            table.AddCell("Prezime");
+            table.AddCell("Odsustva(U)");
+            table.AddCell("Odsustva(O)");
+            table.AddCell("Odsustva(N)");
+            table.AddCell("Prosjek");
+
+
+
+            int TeacherId = TeacherRepository.GetIdQuery();
+            int DepartmentId = DepartmentsRepository.GetIdByTeacherId(TeacherId);
+            string StudentsQuery = StudentRepository.GetQuery(DepartmentId);
+
+            SqlCeCommand cmd = new SqlCeCommand(StudentsQuery, Connection);
+            SqlCeDataReader reader = cmd.ExecuteReader();
+
+
+            try
+            {
+                while (reader.Read())
+                {
+                    int justifiedAbsents = AbsentsRepository.GetAbsents((int)reader["Id"], 1);
+                    int unJustifiedAbsents = AbsentsRepository.GetAbsents((int)reader["Id"], 0);
+                    int sum = justifiedAbsents + unJustifiedAbsents;
+
+                    string CoursesId = CoursesRepository.GetCoursesId();
+                    string[] parts = CoursesId.Split(',');
+                    int suum = 0;
+                    for (int i = 0; i < parts.Length; i++)
+                    {
+                        string marks = MarksRepository.GetMarks((int)reader["Id"]);
+                        string[] particles = marks.Split(',');
+                        double mark = Math.Round(float.Parse(CalculateAverageGrade(particles)), MidpointRounding.AwayFromZero);
+
+                        suum += (int)mark;
+                    }
+
+                    float average = suum / (parts.Length);
+
+                    string averageMark = average.ToString("0.00") + "(" + Math.Round(average, MidpointRounding.AwayFromZero) + ")";
+
+                    table.AddCell(reader["Name"].ToString());
+                    table.AddCell(reader["Surname"].ToString());
+                    table.AddCell(sum.ToString());
+                    table.AddCell(justifiedAbsents.ToString());
+                    table.AddCell(unJustifiedAbsents.ToString());
+                    table.AddCell(averageMark);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            LoginForm logf = new LoginForm();
+            string Dir = logf.GetHomeDirectory();
+
+            FileStream fs = new FileStream("report.pdf", FileMode.Create);
+
+            Document doc = new Document(PageSize.A4);
+            PdfWriter pdfWriter = PdfWriter.GetInstance(doc, fs);
+            doc.Open();
+            doc.Add(table);
+            while (reader.Read())
+            {
+                doc.Add(new Paragraph(reader[0].ToString() + reader[1].ToString() + reader[2].ToString()));
+            }
+
+            pdfWriter.CloseStream = true;
+            doc.Close();
+
+
+            Process.Start("report.pdf");
         }
 
         private void roundedButton1_Click(object sender, EventArgs e)
