@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlServerCe;
 
 namespace ElectronicSchoolDiary
 {
@@ -19,6 +20,8 @@ namespace ElectronicSchoolDiary
     {
         private User CurrentUser;
         private Admin CurrentAdmin;
+        private SqlCeConnection connection = DataBaseConnection.Instance.Connection;
+
 
         public void Warning()
         {
@@ -166,6 +169,7 @@ namespace ElectronicSchoolDiary
 
         private void AddAdminButton_Click(object sender, EventArgs e)
         {
+            connection.Open();
             if (AdminNameTextBox.Text.Length == 0 || AdminSurnameTextBox.Text.Length == 0 || UserNameTextBox.Text.Length == 0)
             {
                 Warning();
@@ -190,9 +194,11 @@ namespace ElectronicSchoolDiary
                     }
                 }
             }
+            connection.Close();
         }
         private void AddSectionsButton_Click(object sender, EventArgs e)
         {
+            connection.Open();
             if (SectionsNameTextBox.Text.Length == 0) { Warning(); }
             else
             {
@@ -208,10 +214,12 @@ namespace ElectronicSchoolDiary
                 else SectionsNameTextBox.Text = "";
 
             }
+            connection.Close();
         }
      
         private void AddDirectorButton_Click(object sender, EventArgs e)
         {
+            connection.Open();
             if (DirectorNameTextBox.Text.Length == 0 || DirectorSurnameTextBox.Text.Length == 0 || DirectorUserNameTextBox.Text.Length == 0)
             {
                 Warning();
@@ -237,6 +245,7 @@ namespace ElectronicSchoolDiary
                 }
                
             }
+            connection.Close();
         }
 
         private void ChangePassAdminButton_Click(object sender, EventArgs e)
@@ -279,6 +288,8 @@ namespace ElectronicSchoolDiary
 
         private void AddStudentButton_Click(object sender, EventArgs e)
         {
+            connection.Open();
+
             bool isEmail = Regex.IsMatch(ParentEmailTextBox.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
 
             if (StudentNameTextBox.Text.Length == 0 ||
@@ -319,6 +330,7 @@ namespace ElectronicSchoolDiary
                 
               
             }
+            connection.Close();
         }
         private void ControlTableButton_Click(object sender, EventArgs e)
         {
@@ -333,7 +345,8 @@ namespace ElectronicSchoolDiary
 
         private void AddCourseButton_Click(object sender, EventArgs e)
         {
-            if(CourseTextBox.Text.Length == 0)
+            connection.Open();
+            if (CourseTextBox.Text.Length == 0)
             {
                 Warning();
             }
@@ -354,11 +367,13 @@ namespace ElectronicSchoolDiary
                     MessageBox.Show("Molimo unesite broj odjeljenja");
                 }
             }
+            connection.Close();
         }
 
         private void AddDepartmentAndClassTeacherButton_Click(object sender, EventArgs e)
         {
-            if(DepartmentNumberTextBox.Text.Length == 0  )
+            connection.Open();
+            if (DepartmentNumberTextBox.Text.Length == 0  )
             {
                 Warning();
             }
@@ -386,13 +401,14 @@ namespace ElectronicSchoolDiary
                 {
                     MessageBox.Show("Molimo unesite broj odjeljenja" );
                 }
-               
+                connection.Close();
 
             }
         }
 
         private void AddTeacherButton_Click(object sender, EventArgs e)
         {
+            connection.Open();
             if (TeacherNameTextBox.Text.Length == 0 ||
                 TeacherSurnameTextBox.Text.Length == 0 ||
                 TeacherUserNameTextBox.Text.Length == 0)
@@ -423,6 +439,7 @@ namespace ElectronicSchoolDiary
                     TeacherAddressTextBox.Text = "";
                     TeacherPhoneTextBox.Text = "";
                 }
+                connection.Close();
             }
         }
     }

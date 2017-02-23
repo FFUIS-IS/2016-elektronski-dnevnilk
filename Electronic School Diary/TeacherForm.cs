@@ -378,7 +378,8 @@ namespace ElectronicSchoolDiary
 
         private void AddMarkButton_Click(object sender, EventArgs e)
         {
-           int mark = int.Parse(MarkComboBox.SelectedItem.ToString());
+            Connection.Open();
+            int mark = int.Parse(MarkComboBox.SelectedItem.ToString());
             Student student = CurrentStudent();
             int studentId = StudentRepository.GetIdByJmbg(student.Jmbg);
             int courseId = CoursesRepository.GetIdByTitle(GetCurrentCourse());
@@ -387,24 +388,33 @@ namespace ElectronicSchoolDiary
             {
                 FillStudentMarks();
             }
+            Connection.Close();
+
         }
 
         private void StudentsBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Connection.Open();
+
             FillStudentInfoLabels();
             FillParentInfoLabels();
             FillStudentAbsents();
             PopulateCoursesComboBox();// ->> Nedded here because fillstudentmarks()  throws error No data exists for the row/column
             FillStudentMarks();
+            Connection.Close();
+
         }
 
         private void CoursesBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Connection.Open();
             FillStudentMarks();
+            Connection.Close();
         }
 
         private void AddAbsentButton_Click(object sender, EventArgs e)
         {
+            Connection.Open();
             Student student = CurrentStudent();
             int studentId = StudentRepository.GetIdByJmbg(student.Jmbg);
             int hours = int.Parse(AbsentHourComboBox.SelectedItem.ToString());
@@ -418,6 +428,7 @@ namespace ElectronicSchoolDiary
             {
                 FillStudentAbsents();
             }
+            Connection.Close();
         }
         private void SendEmail(string confirmed_canceled)
         {

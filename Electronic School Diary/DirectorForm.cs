@@ -193,9 +193,11 @@ namespace ElectronicSchoolDiary
             DepartmentsPanel.Hide();
         }
 
+        
+
         private void CertificateRoundedButton_Click(object sender, EventArgs e)
         {
-
+           
         }
 
         private void roundedButton1_Click(object sender, EventArgs e)
@@ -438,7 +440,7 @@ namespace ElectronicSchoolDiary
             int unjustified = 0;
             while (reader.Read())
             {
-                if (reader.GetByte(1) == 0)
+                if (reader.GetByte(1) == 1)
                     justified += reader.GetInt32(0);
                 else
                     unjustified += reader.GetInt32(0);
