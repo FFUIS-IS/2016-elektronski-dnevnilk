@@ -41,13 +41,13 @@ namespace ElectronicSchoolDiary
             CenterToParent();
             ControlBox = false;
             ChoseComboBox.SelectedIndex = 0;
-            fillTeacher();
+            fillTeachers();
             fillAdmins();
             fillStudents();
             fillDepartments();
         }
 
-        private void fillTeacher()
+        private void fillTeachers()
         {
             Console.Out.WriteLine("U funkciiji");
             TeachersListBox.Items.Clear();
@@ -234,7 +234,7 @@ namespace ElectronicSchoolDiary
                 command.ExecuteNonQuery();
                 connection.Close();
                 MessageBox.Show("Nastavnik je prepravljen u bazi");
-                fillTeacher();
+                fillTeachers();
             }
         }
 
@@ -329,7 +329,7 @@ namespace ElectronicSchoolDiary
                     command.ExecuteNonQuery();
                     connection.Close();
                     MessageBox.Show("Nastavnik je izbrisna iz baze");
-                    fillTeacher();
+                    fillTeachers();
                 }
             }
         }
@@ -375,11 +375,11 @@ namespace ElectronicSchoolDiary
 
         private void StudentsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fillApsents(StudentsListBox.SelectedItem.ToString(), StudentJustifiedAbsentLabel1, StudentUnjustifiedAbsentLabel1);
-            fillSubjects(CoursesComboBox, StudentsListBox.SelectedItem.ToString());
-            fillParent();
+            fillAbsents(StudentsListBox.SelectedItem.ToString(), StudentJustifiedAbsentLabel1, StudentUnjustifiedAbsentLabel1);
+            fillCourses(CoursesComboBox, StudentsListBox.SelectedItem.ToString());
+            fillParents();
         }
-        private void fillParent()
+        private void fillParents()
         {
             command.CommandText = "SELECT * FROM Parents WHERE studentsID = " + selectedItem + ";";
             connection.Open();
@@ -388,11 +388,14 @@ namespace ElectronicSchoolDiary
             {
                 ParentNameLabel.Text = reader.GetString(1);
                 ParentSurnameLabel.Text = reader.GetString(2);
+                ParentAddressLabel.Text = reader.GetString(3);
+                ParentEmailLabel.Text = reader.GetString(4);
+                ParentPhoneLabel.Text = reader.GetString(5);
             }
 
             connection.Close();
         }
-        private void fillSubjects(ComboBox box, string studentName)
+        private void fillCourses(ComboBox box, string studentName)
         {
             box.Items.Clear();
 
@@ -417,7 +420,7 @@ namespace ElectronicSchoolDiary
             connection.Close();
         }
 
-        private void fillApsents(string studentName, Label justifiedLabel, Label unjustifiedLabel)
+        private void fillAbsents(string studentName, Label justifiedLabel, Label unjustifiedLabel)
         {
             string[] name = studentName.Split(' ');
             command.CommandText = "SELECT id from students where name = '" + name[0] + "' AND surname = '" + name[1] + "';";
@@ -449,7 +452,7 @@ namespace ElectronicSchoolDiary
             DialogResult result = MessageBox.Show("Da li ste sigurni da zelite da izbrisete " + AdminNameTextBox.Text + " " + AdminSurnameTextBox.Text + "?", "Upozorenje!", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                command.CommandText = "DELETE FROM Departments WHERE UsersID = " + int.Parse(usernameTextBox.Text) + ";";
+                command.CommandText = "DELETE FROM Departments WHERE Id = " + selectedItem + ";";
                 connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -460,6 +463,8 @@ namespace ElectronicSchoolDiary
 
         private void DepartmentsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            StudentsComboBox.Items.Clear();
+            comboBox1.Items.Clear();
             int justifiedApsent = 0;
             int unjustifiedApsent = 0;
             int numberOfMarks = 0;
@@ -504,8 +509,10 @@ namespace ElectronicSchoolDiary
                         teacherReader.Close();
                         teacherReader = new SqlCeCommand("SELECT * FROM Teachers WHERE id = " + teacherID + ";", connection).ExecuteReader();
                         teacherReader.Read();
-                        // u teacherReader je sve o profesoru
                         TeacherNameLabel.Text = teacherReader.GetString(1);
+                        TeacherSurnameLabel.Text = teacherReader.GetString(2);
+                        TeacherAddressLabel.Text = teacherReader.GetString(3);
+                        TeacherPhoneLabel.Text = teacherReader.GetString(5);
                     }
                 }
             }
@@ -539,20 +546,20 @@ namespace ElectronicSchoolDiary
 
         private void StudentsComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fillSubjects(comboBox1, StudentsComboBox.SelectedItem.ToString());
+            fillCourses(comboBox1, StudentsComboBox.SelectedItem.ToString());
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fillApsents(StudentsComboBox.SelectedItem.ToString(), StudentJustifiedAbsentsLabel, StudentUnjustifiedAbsentsLabel);
+            fillAbsents(StudentsComboBox.SelectedItem.ToString(), StudentJustifiedAbsentsLabel, StudentUnjustifiedAbsentsLabel);
             fillMarks(StudentsComboBox.SelectedItem.ToString(), comboBox1.SelectedItem.ToString(), StudentMarkLabel);
         }
 
-        private void fillMarks(string studentName, string subject, Label label)
+        private void fillMarks(string studentName, string course, Label label)
         {
             label.Text = "";
             connection.Open();
-            command.CommandText = "SELECT id from courses WHERE title = '" + subject + "';";
+            command.CommandText = "SELECT id from courses WHERE title = '" + course + "';";
             reader = command.ExecuteReader();
             reader.Read();
             int courseID = reader.GetInt32(0);
