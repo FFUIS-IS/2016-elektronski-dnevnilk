@@ -26,6 +26,8 @@ namespace ElectronicSchoolDiary
         public void  CheckLogin(TextBox Username, TextBox Password)
         {
            SqlCeConnection Connection = DataBaseConnection.Instance.Connection;
+            Connection.Close();
+            Connection.Open();
                if (Username.TextLength > 0 && Password.TextLength > 0)
                 {
                     try
@@ -95,6 +97,7 @@ namespace ElectronicSchoolDiary
                         MessageBox.Show("Neočekivana greška:" + ex.Message);
                     }
                 }
+            Connection.Close();
         }
            
         }

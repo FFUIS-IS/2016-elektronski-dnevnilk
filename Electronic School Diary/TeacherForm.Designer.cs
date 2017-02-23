@@ -536,7 +536,7 @@
             this.PasswordPanel.Controls.Add(this.NewPassTextBox);
             this.PasswordPanel.Controls.Add(this.OldPassTextBox);
             this.PasswordPanel.Controls.Add(this.label17);
-            this.PasswordPanel.Location = new System.Drawing.Point(4, 46);
+            this.PasswordPanel.Location = new System.Drawing.Point(337, 198);
             this.PasswordPanel.Name = "PasswordPanel";
             this.PasswordPanel.Size = new System.Drawing.Size(905, 405);
             this.PasswordPanel.TabIndex = 58;
