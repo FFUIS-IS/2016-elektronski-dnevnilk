@@ -49,7 +49,6 @@ namespace ElectronicSchoolDiary
 
         private void fillTeachers()
         {
-            Console.Out.WriteLine("U funkciiji");
             TeachersListBox.Items.Clear();
             command.CommandText = "SELECT name, surname FROM Teachers;";
             connection.Close();
@@ -64,7 +63,6 @@ namespace ElectronicSchoolDiary
 
         private void fillAdmins()
         {
-            Console.Out.WriteLine("U funkciiji");
             AdministratorsListBox.Items.Clear();
             command.CommandText = "SELECT name, surname FROM Administration;";
             connection.Close();
@@ -202,7 +200,16 @@ namespace ElectronicSchoolDiary
 
         private void roundedButton1_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = MessageBox.Show("Da li ste sigurni da zelite da izbrisete?", "Upozorenje!", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                command.CommandText = "DELETE FROM Students WHERE Id = " + selectedItem + ";";
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+                MessageBox.Show("Ucenik je izbrisan iz baze");
+                fillStudents();
+            }
         }
 
         private void ControlTableButton_Click(object sender, EventArgs e)
@@ -451,7 +458,7 @@ namespace ElectronicSchoolDiary
         }
         private void RemoveDepartmentButton_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Da li ste sigurni da zelite da izbrisete " + AdminNameTextBox.Text + " " + AdminSurnameTextBox.Text + "?", "Upozorenje!", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show("Da li ste sigurni da zelite da izbrisete?", "Upozorenje!", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
                 command.CommandText = "DELETE FROM Departments WHERE Id = " + selectedItem + ";";
